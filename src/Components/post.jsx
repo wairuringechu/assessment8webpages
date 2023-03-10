@@ -1,39 +1,28 @@
-//POST PAGE
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import './Posts.css';
-
+import './Post.css';
 
 function Posts() {
   const [posts, setPosts] = useState([]);
   const [postId, setPostId] = useState('');
   const [singlePost, setSinglePost] = useState(null);
-// useEffect hook to fetch the list of posts from the provided URL. 
-//  axios library to make HTTP GET request to the specified URL.
+
   useEffect(() => {
-    axios.get('https://dummyjson.com/docs/posts')
-      .then(response => {
-        setPosts(response.data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    fetch('https://dummyjson.com/docs/posts')
+      .then(response => response.json())
+      .then(data => setPosts(data))
+      .catch(error => console.log(error));
   }, []);
-//handlePostIdChange function is used to update the postId state variable whenever the user enters a new post ID in the input field.
-//handleFetchPost function is used to fetch the details of a single post based on the ID entered by the user. 
+
   const handlePostIdChange = event => {
     setPostId(event.target.value);
   };
 
   const handleFetchPost = event => {
     event.preventDefault();
-    axios.get('https://dummyjson.com/posts')(`${postId}`)
-      .then(response => {
-        setSinglePost(response.data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    fetch(`https://dummyjson.com/posts/${postId}`)
+      .then(response => response.json())
+      .then(data => setSinglePost(data))
+      .catch(error => console.log(error));
   };
 
   return (
